@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct ScrollModel {
+struct ScrollModel : Identifiable {
+    let id : String
     let title : String
     let content : String
 }
