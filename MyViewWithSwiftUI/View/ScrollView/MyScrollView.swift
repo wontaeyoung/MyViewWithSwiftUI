@@ -18,34 +18,31 @@ struct MyScrollView: View {
     @State private var isAgreeDone : Bool = false
     
     var body: some View {
+        VStack {
         // MARK: -ScrollView : proxy로 스크롤을 조절할 수 있는 ScrollView
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(alignment : .leading) {
-                    ForEach(scrollViewModel.scrollModels.indices) { index in
-                        Text(scrollViewModel.scrollModels[index].title)
-                            .font(.largeTitle.bold())
-                            .padding(.top, index == 0 ? 0 : 50)
-                            .padding(.bottom, 20)
-                            .id(IDList[index])
-                        
-                        Text(scrollViewModel.scrollModels[index].content)
-                            .font(.body)
-                            .padding(.bottom, 80)
-                        
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment : .leading) {
+                        ForEach(scrollViewModel.scrollModels.indices) { index in
+                            Text(scrollViewModel.scrollModels[index].title)
+                                .font(.largeTitle.bold())
+                                .padding(.bottom, 20)
+                                .id(IDList[index])
+                            
+                            Text(scrollViewModel.scrollModels[index].content)
+                                .font(.body)
+                                .padding(.bottom, 60)
+                            
+                        }
+                        .padding(.horizontal, 20)
                     }
-                    .padding(.horizontal, 20)
                 }
-                .padding(.top, 60)
-            }
-            // MARK: -Overlay : 화면 하단에 고정 위치로 존재하는 버튼 파트
-            .overlay(alignment: .bottom) {
+                // MARK: -Overlay : 화면 하단에 고정 위치로 존재하는 버튼 파트
                 if let lastID = IDList.last {
                     if currentID < lastID {
                         Button {
                             increaseID()
                             withAnimation {
-                                
                                 proxy.scrollTo(IDList[currentID], anchor : .top)
                             }
                         } label: {
@@ -57,9 +54,8 @@ struct MyScrollView: View {
                     }
                 }
             }
-            
-            
         }
+        .padding(.top, 20)
     }
     
     // MARK: -Button : 동의하기 버튼
@@ -69,8 +65,6 @@ struct MyScrollView: View {
         } label: {
             Text(isAgreeDone ? "동의 완료" : "동의하기")
                 .modifier(ScrollOverlayButtonModifier(isAgreeDone: $isAgreeDone))
-                .background(isAgreeDone ? Color.gray : Color.blue)
-                
         }
         .disabled(isAgreeDone)
     }
