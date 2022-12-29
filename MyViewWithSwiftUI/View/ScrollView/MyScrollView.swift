@@ -45,17 +45,12 @@ struct MyScrollView: View {
                         Button {
                             increaseID()
                             withAnimation {
+                                
                                 proxy.scrollTo(IDList[currentID], anchor : .top)
                             }
                         } label: {
                             Text("아래로 스크롤하기")
-                                .bold()
-                                .padding(.vertical, 10)
-                                .frame(width : 250)
-                                .foregroundColor(.white)
-                                .background(Color.blue)
-                                .cornerRadius(15)
-                                .padding(.bottom, 20)
+                                .modifier(ScrollOverlayButtonModifier(isAgreeDone: $isAgreeDone))
                         }
                     } else {
                         agreeButton
@@ -73,13 +68,9 @@ struct MyScrollView: View {
             isAgreeDone = true
         } label: {
             Text(isAgreeDone ? "동의 완료" : "동의하기")
-                .bold()
-                .padding(.vertical, 10)
-                .frame(width : 250)
-                .foregroundColor(.white)
+                .modifier(ScrollOverlayButtonModifier(isAgreeDone: $isAgreeDone))
                 .background(isAgreeDone ? Color.gray : Color.blue)
-                .cornerRadius(15)
-                .padding(.bottom, 20)
+                
         }
         .disabled(isAgreeDone)
     }
@@ -91,6 +82,25 @@ struct MyScrollView: View {
     
 }
 
+// MARK: -Modifier : Overlay 버튼 Modifier
+struct ScrollOverlayButtonModifier : ViewModifier {
+    @Binding var isAgreeDone : Bool
+    var backgroundColor : Color {
+        return isAgreeDone ? .gray : .blue
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .bold()
+            .padding(.vertical, 10)
+            .frame(width : 250)
+            .foregroundColor(.white)
+            .background(backgroundColor)
+            .cornerRadius(15)
+            .shadow(radius: 10)
+            .padding(.bottom, 20)
+    }
+}
 
 
 struct MyScrollView_Previews: PreviewProvider {
