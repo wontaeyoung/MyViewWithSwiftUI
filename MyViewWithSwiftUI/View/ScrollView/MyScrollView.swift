@@ -38,10 +38,58 @@ struct MyScrollView: View {
                 }
                 .padding(.top, 60)
             }
+            // MARK: -Overlay : 화면 하단에 고정 위치로 존재하는 버튼 파트
+            .overlay(alignment: .bottom) {
+                if let lastID = IDList.last {
+                    if currentID < lastID {
+                        Button {
+                            increaseID()
+                            withAnimation {
+                                proxy.scrollTo(IDList[currentID], anchor : .top)
+                            }
+                        } label: {
+                            Text("아래로 스크롤하기")
+                                .bold()
+                                .padding(.vertical, 10)
+                                .frame(width : 250)
+                                .foregroundColor(.white)
+                                .background(Color.blue)
+                                .cornerRadius(15)
+                                .padding(.bottom, 20)
+                        }
+                    } else {
+                        agreeButton
+                    }
+                }
+            }
+            
+            
         }
     }
+    
+    // MARK: -Button : 동의하기 버튼
+    private var agreeButton : some View {
+        Button {
+            isAgreeDone = true
+        } label: {
+            Text(isAgreeDone ? "동의 완료" : "동의하기")
+                .bold()
+                .padding(.vertical, 10)
+                .frame(width : 250)
+                .foregroundColor(.white)
+                .background(isAgreeDone ? Color.gray : Color.blue)
+                .cornerRadius(15)
+                .padding(.bottom, 20)
+        }
+        .disabled(isAgreeDone)
+    }
+    
+    // MARK: -Func : 현재 proxy ID를 1씩 증가시키는 함수
+    private func increaseID() {
+        self.currentID += 1
+    }
+    
 }
-
 
 
 
