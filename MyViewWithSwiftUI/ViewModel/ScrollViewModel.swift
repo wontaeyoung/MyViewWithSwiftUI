@@ -10,7 +10,7 @@ import Foundation
 class ScrollViewModel : ObservableObject {
     @Published var scrollModels: [ScrollModel]
     
-    init(scrollModels: [ScrollModel] = []) {
+    init(scrollModels: [ScrollModel] = [scrollModel1, scrollModel2, scrollModel3, scrollModel4]) {
         self.scrollModels = scrollModels
     }
 }
