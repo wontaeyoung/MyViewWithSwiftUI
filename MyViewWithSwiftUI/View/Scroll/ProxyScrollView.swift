@@ -1,5 +1,5 @@
 //
-//  MyScrollView.swift
+//  ProxyScrollView.swift
 //  MyViewWithSwiftUI
 //
 //  Created by 원태영 on 2022/12/25.
@@ -7,32 +7,23 @@
 
 import SwiftUI
 
-struct MyScrollView: View {
-    
+struct ProxyScrollView: View {
     let IDList : [Int] = [0,1,2,3]
     
-    @ObservedObject var scrollViewModel : ScrollViewModel = ScrollViewModel(
-        scrollModels: [scrollModel1, scrollModel2, scrollModel3, scrollModel4]
-    )
+    @ObservedObject var scrollViewModel : ScrollViewModel = ScrollViewModel()
     @State private var currentID : Int = 0
     @State private var isAgreeDone : Bool = false
+//    @State private var currentOffset :
     
     var body: some View {
         VStack {
-        // MARK: -ScrollView : proxy로 스크롤을 조절할 수 있는 ScrollView
+            // MARK: -ScrollView : proxy로 스크롤을 조절할 수 있는 ScrollView
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment : .leading) {
                         ForEach(scrollViewModel.scrollModels.indices) { index in
-                            Text(scrollViewModel.scrollModels[index].title)
-                                .font(.largeTitle.bold())
-                                .padding(.bottom, 20)
-                                .id(IDList[index])
-                            
-                            Text(scrollViewModel.scrollModels[index].content)
-                                .font(.body)
-                                .padding(.bottom, 60)
-                            
+                            TermsCell(index: index, scrollViewModel: scrollViewModel)
+                                .id(index)
                         }
                         .padding(.horizontal, 20)
                     }
@@ -76,6 +67,24 @@ struct MyScrollView: View {
     
 }
 
+
+// MARK: -View : 약관 제목과 내용 Cell
+struct TermsCell : View {
+    let index : Int
+    @ObservedObject var scrollViewModel : ScrollViewModel
+    
+    var body : some View {
+        Text(scrollViewModel.scrollModels[index].title)
+            .font(.largeTitle.bold())
+            .padding(.bottom, 20)
+        
+        Text(scrollViewModel.scrollModels[index].content)
+            .font(.body)
+            .padding(.bottom, 60)
+    }
+}
+
+
 // MARK: -Modifier : Overlay 버튼 Modifier
 struct ScrollOverlayButtonModifier : ViewModifier {
     @Binding var isAgreeDone : Bool
@@ -97,8 +106,8 @@ struct ScrollOverlayButtonModifier : ViewModifier {
 }
 
 
-struct MyScrollView_Previews: PreviewProvider {
+struct ProxyScrollView_Previews: PreviewProvider {
     static var previews: some View {
-        MyScrollView()
+        ProxyScrollView()
     }
 }
